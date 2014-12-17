@@ -17,6 +17,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# The real value is set in the local_settings.py
+# local_settings.py is excluded from the git repository
+# Place other important keys, passwords etc. in local_settings.py
+# which is called at the end of settings.py
+
+# I recommend setting a default/false value in settings.py
+# and then overwriting in local_settings. This keeps the app
+# functional if anyone clones the repository
 SECRET_KEY = 'FAKE_VALUE_REAL_VALUE_SET_IN_LOCAL_SETTINGS'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -54,8 +62,7 @@ DEFAULT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    'south',
-    'djangorestframework',
+    'rest_framework',
 )
 
 LOCAL_APPS = (
