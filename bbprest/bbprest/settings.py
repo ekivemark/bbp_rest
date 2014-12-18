@@ -49,7 +49,6 @@ if DEBUG_SETTINGS:
     print "BASE_DIR:%s " % BASE_DIR
 
 
-
 # Application definition
 
 DEFAULT_APPS = (
@@ -62,11 +61,17 @@ DEFAULT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+    #'provider',
+    #'provider.oauth2',
+    'oauth2_provider',
+    'corsheaders',
     'rest_framework',
+    'fhir',
 )
 
 LOCAL_APPS = (
     'snippets',
+    'fhir_rest',
 )
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS

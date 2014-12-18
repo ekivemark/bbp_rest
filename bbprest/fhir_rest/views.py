@@ -39,7 +39,7 @@ def patient_create(request):
 
     print "Request: %s" % request_type
 
-    back_at_you = '[%s]Create functions with are disabled' % request_type
+    back_at_you = '[%s]Create functions for entity PATIENT are disabled' % request_type
 
     return HttpResponse(back_at_you , status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
