@@ -10,7 +10,10 @@ urlpatterns = patterns('',
     # url(r'^$', 'bbprest.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    # OAuth Provider
+    # http://django-oauth-toolkit.readthedocs.org/en/latest/tutorial/tutorial_01.html
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # look ma, I'm a provider!
+
     #url(r'^api/hello', ApiEndpoint.as_view()),  # and also a resource server!
 
     # API

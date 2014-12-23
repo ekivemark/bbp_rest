@@ -25,6 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # I recommend setting a default/false value in settings.py
 # and then overwriting in local_settings. This keeps the app
 # functional if anyone clones the repository
+# You can generate a new SECRET_KEY using tools such as
+# http://www.miniwebtool.com/django-secret-key-generator/
+#
 SECRET_KEY = 'FAKE_VALUE_REAL_VALUE_SET_IN_LOCAL_SETTINGS'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -72,6 +75,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'snippets',
     'fhir_rest',
+    'fhir_patient',
 )
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -85,6 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = 'bbprest.urls'
