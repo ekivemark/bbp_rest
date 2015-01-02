@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-
 admin.autodiscover()
 
 
@@ -14,6 +13,8 @@ urlpatterns = patterns('',
     # http://django-oauth-toolkit.readthedocs.org/en/latest/tutorial/tutorial_01.html
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # look ma, I'm a provider!
 
+    # Django Rest Framework tutorial
+    url(r'^snip/', include('snippets.urls')),
 
     # API
     url(r'^api/1.0/', include('fhir_patient.urls', namespace='bb_fhir')),
