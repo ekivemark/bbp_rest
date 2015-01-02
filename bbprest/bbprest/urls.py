@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-#from .views import ApiEndpoint
+
 admin.autodiscover()
 
 
@@ -14,10 +14,9 @@ urlpatterns = patterns('',
     # http://django-oauth-toolkit.readthedocs.org/en/latest/tutorial/tutorial_01.html
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # look ma, I'm a provider!
 
-    #url(r'^api/hello', ApiEndpoint.as_view()),  # and also a resource server!
 
     # API
-    url(r'^api/1.0/', include('fhir_rest.urls', namespace='bb_fhir')),
+    url(r'^api/1.0/', include('fhir_patient.urls', namespace='bb_fhir')),
 
     url(r'^admin/', include(admin.site.urls)),
 )

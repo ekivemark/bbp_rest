@@ -1,12 +1,11 @@
-from django.shortcuts import render
-from rest_framework import viewsets, routers
-from rest_framework import permissions
-from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
-from django.http import HttpResponse, Http404
-from . import status
+from django.http import HttpResponse
 from django.conf import settings as CONFIG
+
+from bbprest.fhir_patient import status
 from fhir_patient.tools import *
-from oauth2_provider.views.generic import ProtectedResourceView
+
+
+#from oauth2_provider.views.generic import ProtectedResourceView
 
 # Create your views here.
 # We will protect these views with OAUTH

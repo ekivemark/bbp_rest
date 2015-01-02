@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from platform import python_version
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -48,9 +49,9 @@ APPLICATION_TITLE = "BlueButton Data Service"
 
 if DEBUG_SETTINGS:
     print "Application: %s" % APPLICATION_TITLE
+    print "Running on Python_version: %s" % python_version()
     print ""
     print "BASE_DIR:%s " % BASE_DIR
-
 
 # Application definition
 
@@ -64,17 +65,17 @@ DEFAULT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    #'provider',
-    #'provider.oauth2',
+#    'provider',
+#    'provider.oauth2',
     'oauth2_provider',
     'corsheaders',
     'rest_framework',
-    'fhir',
+#    'fhir',
 )
 
 LOCAL_APPS = (
     'snippets',
-    'fhir_rest',
+#    'fhir_rest',
     'fhir_patient',
 )
 
@@ -147,6 +148,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Django Oauth Toolkit
+# http://django-oauth-toolkit.readthedocs.org/en/latest/tutorial/tutorial_01.html
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Oauth2_provider settings:
+#OAUTH2_PROVIDER = {
+#    # this is the list of available scopes
+#    'SCOPES': ['read', 'write', 'groups']
+#}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.OAuth2Authentication',
+    ),
+#    'DEFAULT_PERMISSION_CLASSES': (
+#        'rest_framework.permissions.IsAuthenticated',
+#    )
+}
 
 # Get Local Settings that you want to keep private.
 # Make sure Local_settings.py is excluded from Git
