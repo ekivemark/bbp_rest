@@ -65,6 +65,8 @@ DEFAULT_APPS = (
 )
 
 THIRD_PARTY_APPS = (
+    'localflavor',
+    'django_countries',
 #    'provider',
 #    'provider.oauth2',
     'oauth2_provider',
@@ -159,14 +161,46 @@ CORS_ORIGIN_ALLOW_ALL = True
 #    'SCOPES': ['read', 'write', 'groups']
 #}
 
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'templates').replace('\\','/'),
+)
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+if DEBUG_SETTINGS:
+    print "TEMPLATE_DIRS: %s" % TEMPLATE_DIRS
+
+
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.OAuth2Authentication',
-    ),
-#    'DEFAULT_PERMISSION_CLASSES': (
-#        'rest_framework.permissions.IsAuthenticated',
-#    )
+    #'FORMAT_SUFFIX_KWARG':'format',
+    'URL_FORMAT_OVERRIDE':'_format',
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'rest_framework.authentication.OAuth2Authentication',
+#    ),
+
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+#   'DEFAULT_PERMISSION_CLASSES': (
+#       'rest_framework.permissions.IsAuthenticated',
+#   ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'fhir_patient.renderers.FHIRJRenderer',
+        'fhir_patient.renderers.FHIRARenderer',
+        'rest_framework.renderers.JSONRenderer',
+#        'rest_framework.renderers.TemplateHTMLRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.XMLRenderer',
+    )
+
 }
+
 
 # Get Local Settings that you want to keep private.
 # Make sure Local_settings.py is excluded from Git

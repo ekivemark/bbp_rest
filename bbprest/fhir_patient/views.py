@@ -1,8 +1,27 @@
 from django.shortcuts import render
 from oauth2_provider.views.generic import ProtectedResourceView
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404
+
 from django.conf import settings as CONFIG
 from . import status
+
+from rest_framework import viewsets
+from rest_framework import mixins
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import XMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import BrowsableAPIRenderer
+from renderers import FHIRJRenderer
+from renderers import FHIRARenderer
+from renderers import FHIRXRenderer
+
+
+from models import Beneficiary
+from serializers import BeneficiarySerializer
+
 
 from .tools import valid_patient
 """
@@ -29,66 +48,60 @@ class ApiTestPoint(ProtectedResourceView):
         return HttpResponse('Hello, OAuth2!')
 
 
-class ApiPatient_Read(ProtectedResourceView):
-    def get(self, request, patient_id, *args, **kwargs):
 
-    # Test patient_id for valid format
-    # Id and version id is 36 character regex: [a-z0-9\-\.]{1,36}
-    # This was evaluated in urls.py before being passed to this function
-    # invalid formats have already returned a 404
+class BeneficiaryViewSet(mixins.CreateModelMixin,
+                                mixins.ListModelMixin,
+                                mixins.RetrieveModelMixin,
+                                viewsets.GenericViewSet):
 
-    # Now we can Test for compliance with PHIR call format:
-    # Request Type = GET
-        request_type = request.method
+    renderer_classes = (FHIRJRenderer,
+                        FHIRARenderer,
+                        FHIRXRenderer,
+                        BrowsableAPIRenderer,
+                        TemplateHTMLRenderer,
+                        JSONRenderer,
+                        XMLRenderer)
 
-    # Then we can do a lookup for patient_id
-    # We return 410 if resource has been deleted
-    # We return 404 if not found
+    queryset = Beneficiary.objects.all()
+    serializer_class = BeneficiarySerializer
 
-        patient_test = valid_patient(patient_id)
+    def list(self, request):
+        queryset = Beneficiary.objects.all()
+        serializer = BeneficiarySerializer(queryset, many=True)
+        return Response(serializer.data)
 
-        if CONFIG.DEBUG == True:
-            print "Valid Patient: [%s]" % patient_test
-
-    # If valid patient_id is found we display it.
-
-
-    # We need to evaluate the call parameter
-    # _format=[mime-type]
-    #  to return JSON or XML document.
-
-    # Set a default status code
-        result = status.HTTP_200_OK
-
-        back_at_you = '[%s]%s Patient Read request for %s' % (request_type, patient_test, patient_id)
-
-        if CONFIG.DEBUG == True:
-            print "Patient Id:[%s] " % patient_id
-            print "Request: %s" % request_type
-            print "%s with status: %s" % (back_at_you, result)
-
-        return HttpResponse(back_at_you, status=result)
-
-class ApiPatient_Read_Version(ProtectedResourceView):
-    def get(self, request, patient_id, version_id, *args, **kwargs):
-
-        print "In Api_Patient_Read_Version"
-
-        # Now we can Test for compliance with PHIR call format:
-        # Request Type = GET
-        request_type = request.method
-
-        # Then we can do a lookup for patient_id
-        # We return 410 if resource has been deleted
-        # We return 404 if not found
-
-        patient_test = valid_patient(patient_id)
-        version = version_id
+    def retrieve(self, request, pk=None):
+        queryset = Beneficiary.objects.all()
+        beneficiary = get_object_or_404(queryset, pk=pk)
+        serializer = BeneficiarySerializer(beneficiary)
+        return Response(serializer.data)
 
 
-        if CONFIG.DEBUG == True:
-            print "Valid Patient: [%s]" % patient_test
-            print "Version %s" % version
+class BeneficiaryDetail(mixins.RetrieveModelMixin,
+                        generics.GenericAPIView):
+    """
+    Retrieve a Beneficiary instance.
+    """
+    queryset = Beneficiary.objects.all()
+    serializer_class = BeneficiarySerializer
 
 
-        return HttpResponse(patient_test, patient_id, version, request_type)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+
+class BeneficiaryDetail_Version(mixins.RetrieveModelMixin):
+    """
+    Retrieve a Version of a Beneficiary record
+    """
+    queryset = Beneficiary.objects.all()
+    serializer_class = BeneficiarySerializer
+
+    def get(self, request, *args, **kwargs):
+        print "ID: %s" % id
+        print "Version: %s" % version_id
+
+        return
+
+
