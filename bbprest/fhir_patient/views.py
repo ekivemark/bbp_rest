@@ -11,10 +11,12 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework.renderers import JSONRenderer
 from rest_framework.renderers import XMLRenderer
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.renderers import BrowsableAPIRenderer
+from rest_framework.decorators import api_view
 from renderers import FHIRJRenderer
 from renderers import FHIRARenderer
 from renderers import FHIRXRenderer
@@ -43,10 +45,6 @@ the modules with extract routines tailored to their specific environment.
 
 """
 # Create your views here.
-class ApiTestPoint(ProtectedResourceView):
-    def get(self, request, *args, **kwargs):
-        print "hello endpoint test"
-        return HttpResponse('Hello, OAuth2!')
 
 
 
@@ -110,9 +108,9 @@ class BeneficiaryDetailViewSet(mixins.ListModelMixin,
         print "in create"
         return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        print "in post"
-        return self.retrieve(request, *args, **kwargs)
+#    def post(self, request, *args, **kwargs):
+#        print "in post"
+#        return self.retrieve(request, *args, **kwargs)
 
 
 class BeneficiaryVersionViewSet(mixins.CreateModelMixin,
@@ -145,3 +143,14 @@ class BeneficiaryVersionViewSet(mixins.CreateModelMixin,
 
     def get(self, request, *args, **kwargs):
         return self.version_retrieve(request, *args, **kwargs)
+
+@api_view(('GET',))
+def ApiStatus(request, format=None):
+
+    status = "FHIR Specification API Status. " \
+             "Data source: Pre-prototype. " \
+             "read. vread."
+
+    return Response({
+        'status': status,
+    })

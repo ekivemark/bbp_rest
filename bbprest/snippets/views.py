@@ -46,8 +46,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 @api_view(('GET',))
 def api_root(request, format=None):
 
-
+    status = "Snippet Test"
     return Response({
+        'status': status,
         'users': reverse('user-list', request=request, format=format),
         'snippets': reverse('snippet-list', request=request, format=format)
     })
