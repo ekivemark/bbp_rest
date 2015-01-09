@@ -14,16 +14,25 @@ from views import *
 
 from rest_framework.urlpatterns import format_suffix_patterns
 from views import BeneficiaryViewSet
-from views import BeneficiaryDetail
-from views import BeneficiaryDetail_Version
-from rest_framework import renderers
+from views import BeneficiaryDetailViewSet
+from views import BeneficiaryVersionViewSet
+
 
 beneficiary_list = BeneficiaryViewSet.as_view({
     'get':'list',
     'post':'create'
 })
 
-detail_mode = {'get':'retrieve','post':'create'}
+detail_mode = {'get':'retrieve',
+               'post':'create'}
+
+version_mode = {'get':'version_retrieve',
+                'post':'create'}
+
+beneficiary_detail = BeneficiaryDetailViewSet.as_view(detail_mode)
+
+beneficiary_detail_version = BeneficiaryVersionViewSet.as_view(version_mode)
+
 
 urlpatterns = format_suffix_patterns([
     # Examples:
@@ -35,8 +44,7 @@ urlpatterns = format_suffix_patterns([
     # Patient Processing
     # Id and version id is 36 character regex: [a-z0-9\-\.]{1,36}
     url(r'^patient/$', beneficiary_list, name='beneficiary-list'),
-    url(r'^patient/(?P<id>\w[a-z0-9\-\.]{1,36})/$', BeneficiaryDetail.as_view(lookup_field='id'), name='beneficiary-detail'),
-
-    url(r'^patient/(?P<id>\w+)/_history/(?P<version_id>\w[0-9\-\.])/$', BeneficiaryDetail.as_view(lookup_field='id'), name='beneficiary-version' ),
+    url(r'^patient/(?P<id>\w[a-z0-9\-\.]{1,36})/_history/(?P<version>\w[A-Z0-9\-\.\:]{1,28})/$', beneficiary_detail_version, name='beneficiary-version' ),
+    url(r'^patient/(?P<id>\w[a-z0-9\-\.]{1,36})/$', beneficiary_detail, name='beneficiary-detail'),
 
 ])

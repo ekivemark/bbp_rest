@@ -2,6 +2,7 @@ from django.shortcuts import render
 from oauth2_provider.views.generic import ProtectedResourceView
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404
 
 from django.conf import settings as CONFIG
 from . import status
@@ -66,42 +67,81 @@ class BeneficiaryViewSet(mixins.CreateModelMixin,
     serializer_class = BeneficiarySerializer
 
     def list(self, request):
+        print "in list"
         queryset = Beneficiary.objects.all()
         serializer = BeneficiarySerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Beneficiary.objects.all()
-        beneficiary = get_object_or_404(queryset, pk=pk)
-        serializer = BeneficiarySerializer(beneficiary)
-        return Response(serializer.data)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
-class BeneficiaryDetail(mixins.RetrieveModelMixin,
-                        generics.GenericAPIView):
-    """
-    Retrieve a Beneficiary instance.
-    """
+class BeneficiaryDetailViewSet(mixins.ListModelMixin,
+                                mixins.RetrieveModelMixin,
+                                viewsets.GenericViewSet):
+
+    renderer_classes = (FHIRJRenderer,
+                        FHIRARenderer,
+                        FHIRXRenderer,
+                        BrowsableAPIRenderer,
+                        TemplateHTMLRenderer,
+                        JSONRenderer,
+                        XMLRenderer)
+
     queryset = Beneficiary.objects.all()
     serializer_class = BeneficiarySerializer
 
+    def retrieve(self, request, id=None, *args, **kwargs):
+        print "in retrieve"
+        print "ID: %s" % id
+
+
+        queryset = Beneficiary.objects.all()
+        beneficiary = get_object_or_404(queryset, id=id)
+        serializer = BeneficiarySerializer(beneficiary)
+        return Response(serializer.data)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
 
+    def create(self, request, *args, **kwargs):
+        print "in create"
+        return self.retrieve(request, *args, **kwargs)
 
-class BeneficiaryDetail_Version(mixins.RetrieveModelMixin):
-    """
-    Retrieve a Version of a Beneficiary record
-    """
+    def post(self, request, *args, **kwargs):
+        print "in post"
+        return self.retrieve(request, *args, **kwargs)
+
+
+class BeneficiaryVersionViewSet(mixins.CreateModelMixin,
+                                mixins.ListModelMixin,
+                                mixins.RetrieveModelMixin,
+                                viewsets.GenericViewSet):
+
+    renderer_classes = (FHIRJRenderer,
+                        FHIRARenderer,
+                        FHIRXRenderer,
+                        BrowsableAPIRenderer,
+                        TemplateHTMLRenderer,
+                        JSONRenderer,
+                        XMLRenderer)
+
     queryset = Beneficiary.objects.all()
     serializer_class = BeneficiarySerializer
 
+    def version_retrieve(self, request, id=None, version=None):
+        print "in version retrieve"
+        queryset = Beneficiary.objects.all()
+        beneficiary_list = queryset.filter(pk=id)
+
+        #beneficiary_version = beneficiary_list.filter(version=version)
+        beneficiary_version = get_object_or_404(beneficiary_list, version=version)
+
+        serializer = BeneficiarySerializer(beneficiary_version)
+        return Response(serializer.data)
+
+
     def get(self, request, *args, **kwargs):
-        print "ID: %s" % id
-        print "Version: %s" % version_id
-
-        return
-
-
+        return self.version_retrieve(request, *args, **kwargs)

@@ -17,8 +17,8 @@ class BeneficiarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Beneficiary
-        fields = ('id', 'version','first_name', 'last_name',
+        fields = ('id','first_name', 'last_name',
         'date_of_birth','address_line_1',
     'address_line_2', 'city', 'state', 'zip',
-    'country', 'phone', 'email', 'latest'
+    'country', 'phone', 'email', 'latest','version',
         )
