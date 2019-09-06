@@ -13,7 +13,7 @@ django-oauth-toolkit==0.7.2
 django-oauth2-provider==0.2.6.1
 djangorestframework==3.0.2
 fhir==0.0.4
-httpie==0.8.0
+httpie==1.0.3
 httplib2==0.9
 lxml==3.4.1
 mock==1.0.1
