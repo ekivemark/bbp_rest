@@ -11,7 +11,7 @@ django-localflavor==1.1
 django-oauth-plus==2.2.5
 django-oauth-toolkit==0.7.2
 django-oauth2-provider==0.2.6.1
-djangorestframework==3.0.2
+djangorestframework==3.9.1
 fhir==0.0.4
 httpie==1.0.3
 httplib2==0.9
