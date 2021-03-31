@@ -15,7 +15,7 @@ djangorestframework==3.9.1
 fhir==0.0.4
 httpie==1.0.3
 httplib2==0.9
-lxml==3.4.1
+lxml==4.6.3
 mock==1.0.1
 oauth2==1.5.211
 oauthlib==0.7.2
